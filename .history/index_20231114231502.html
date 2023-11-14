@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko-kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      .title {
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="kiosk">
+      <div class="banner">
+        <div class="ad-display"></div>
+        <div class="progress-display"></div>
+      </div>
+      <div class="order" style="display: flex; justify-content: space-evenly">
+        <div class="food">
+          <input type="button" value="순대국" />
+        </div>
+        <div class="food"><input type="button" value="해장국" /></div>
+      </div>
+    </div>
+    <div class="order-display" style="margin: 30px">
+      <div class="item" style="margin: 30px">
+        <div class="title">대기중</div>
+        <div id="waiting"></div>
+      </div>
+      <div class="item" style="margin: 30px">
+        <div class="title">요리중</div>
+        <div id="cooking"></div>
+      </div>
+      <div class="item" style="margin: 30px">
+        <div class="title">서빙중</div>
+        <div id="serving"></div>
+      </div>
+    </div>
+
+    <script src="./js/main.js" type="module"></script>
+  </body>
+</html>
