@@ -1,0 +1,32 @@
+/*!****************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[0].use[1]!./src/styles/style.css ***!
+  \****************************************************************************************************/
+.order-display .title {
+  font-weight: 800;
+}
+
+.order {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.order-display {
+  margin: 30px;
+}
+
+.order-display .item {
+  margin: 30px;
+}
+
+.order-display .item .order-display-item {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+/*!***************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[0].use[1]!./src/styles/test.css ***!
+  \***************************************************************************************************/
+.hello {
+  counter-reset: none;
+}
+

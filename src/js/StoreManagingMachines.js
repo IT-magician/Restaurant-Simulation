@@ -1,4 +1,4 @@
-import { Food, sundaeSoop, SoopForHangingOver } from "/js/food.js";
+import { Food, sundaeSoop, SoopForHangingOver } from "@/js/food.js";
 
 /**
  * OrderManger는 1:1, 1:N 모두가 될 수 있음. 1:1은 자기자신, 1:N인 경우는 메인-워커쓰레드처럼 자기 자신이 로드밸런서 역할을 하는 것으로 설계했음.
@@ -39,7 +39,7 @@ class OrderManager {
       (item) => item.orderNumber !== orderNumber
     );
 
-    this.#update(uuid, "서빙완료");
+    this.#displayDrawerFunc(this.#orderList);
 
     return removedItem;
   }

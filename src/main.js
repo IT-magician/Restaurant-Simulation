@@ -1,8 +1,10 @@
 import {
   GeneralModelOfOrderManager,
   Kiosk,
-} from "/js/StoreManagingMachines.js";
-import { Cooker, Waiter } from "/js/staff.js";
+} from "@/js/StoreManagingMachines.js";
+import { Cooker, Waiter } from "@/js/staff.js";
+import Style1 from "@/styles/style.css";
+import Style2 from "@/styles/test.css";
 
 /// _____________________________________________________________________________________
 //                        Updator of Order's status view Components
