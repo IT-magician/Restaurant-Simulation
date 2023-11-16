@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
-    <style>
-      .title {
-        font-weight: 800;
-      }
+    <link rel="stylesheet" href="/styles/style.css">
     </style>
   </head>
   <body>
@@ -17,23 +14,25 @@
         <div class="ad-display"></div>
         <div class="progress-display"></div>
       </div>
-      <div class="order" style="display: flex; justify-content: space-evenly">
+      <div class="order">
         <div class="food">
           <input type="button" value="순대국" />
         </div>
-        <div class="food"><input type="button" value="해장국" /></div>
+        <div class="food">
+          <input type="button" value="해장국" />
+        </div>
       </div>
     </div>
-    <div class="order-display" style="margin: 30px">
-      <div class="item" style="margin: 30px">
+    <div class="order-display">
+      <div class="item">
         <div class="title">대기중</div>
         <div id="waiting"></div>
       </div>
-      <div class="item" style="margin: 30px">
+      <div class="item">
         <div class="title">요리중</div>
         <div id="cooking"></div>
       </div>
-      <div class="item" style="margin: 30px">
+      <div class="item">
         <div class="title">서빙중</div>
         <div id="serving"></div>
       </div>

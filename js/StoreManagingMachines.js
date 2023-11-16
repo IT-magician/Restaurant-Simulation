@@ -1,4 +1,4 @@
-import { Food, sundaeSoop, SoopForHangingOver } from "./food.js";
+import { Food, sundaeSoop, SoopForHangingOver } from "/js/food.js";
 
 /**
  * OrderManger는 1:1, 1:N 모두가 될 수 있음. 1:1은 자기자신, 1:N인 경우는 메인-워커쓰레드처럼 자기 자신이 로드밸런서 역할을 하는 것으로 설계했음.
@@ -6,8 +6,10 @@ import { Food, sundaeSoop, SoopForHangingOver } from "./food.js";
 class OrderManager {
   #orderList = [];
   #waitingCookers = [];
+  #waitingCookerQueueTicket = [];
   #displayDrawerFunc;
   #waitingWaiters = [];
+  #waitingWaiterQueueTicket = [];
 
   #uuid = 1;
 
@@ -37,6 +39,8 @@ class OrderManager {
       (item) => item.orderNumber !== orderNumber
     );
 
+    this.#update(uuid, "서빙완료");
+
     return removedItem;
   }
 
@@ -56,7 +60,7 @@ class OrderManager {
     let idx = this.#search(orderNumber);
     if (idx > -1) {
       this.#orderList[idx].statusName = statusName;
-      console.log(`수정한 아이템 결과 : `, this.#orderList[idx]);
+      // console.log(`수정한 아이템 결과 : `, this.#orderList[idx]);
     }
 
     this.#displayDrawerFunc(this.#orderList);
@@ -78,19 +82,21 @@ class OrderManager {
     });
     this.#update(uuid, "대기중");
 
-    const waitingStaffUntilArriving = async function (staff) {
+    const waitingStaffUntilArriving = async function (staff, queue) {
       let result = null;
       const maxWatchTime = 1000 * 3600; // 1hour
       let watchTime = 0;
       let interval = 100;
 
+      queue.push(uuid);
       await new Promise((resolve, reject) => {
         const checker = window.setInterval(() => {
           watchTime += interval;
           if (interval >= maxWatchTime) clearInterval(checker);
 
-          if (staff.length > 0) {
+          if (staff.length > 0 && queue[0] === uuid) {
             clearInterval(checker);
+            queue.shift();
             resolve(staff.shift());
           }
         }, interval);
@@ -101,8 +107,15 @@ class OrderManager {
       return result;
     };
 
+    // const deployJobToStaff = async function(staff : Staff) {
+    // }
+
+    // deploy job : 요리사 배정 -> 웨이터 배정
     new Promise(async (resolve, reject) => {
-      let cooker = await waitingStaffUntilArriving(this.#waitingCookers);
+      let cooker = await waitingStaffUntilArriving(
+        this.#waitingCookers,
+        this.#waitingCookerQueueTicket
+      );
 
       cooker.setProgressWaitingTime(
         cooker.getProgressLevel("요리중"),
@@ -133,7 +146,10 @@ class OrderManager {
 
       resolve();
     }).then(async () => {
-      let waiter = await waitingStaffUntilArriving(this.#waitingWaiters);
+      let waiter = await waitingStaffUntilArriving(
+        this.#waitingWaiters,
+        this.#waitingWaiterQueueTicket
+      );
 
       if (waiter.getCurrentProgressLevel() > 0) waiter.resetProgress();
 
@@ -152,7 +168,6 @@ class OrderManager {
       this.#waitingWaiters.push(waiter);
 
       this.pop(uuid);
-      this.#update(uuid, "서빙완료");
     });
   }
 
@@ -187,15 +202,6 @@ class Kiosk {
     this.#orderManager = orderManager;
   }
 
-  orderSundaeSoop() {
-    const food = new sundaeSoop();
-    return this.#order(food);
-  }
-
-  orderSoopForHangingOver() {
-    return this.#order(new SoopForHangingOver());
-  }
-
   /**
    *
    * @param {Food} food
@@ -203,6 +209,19 @@ class Kiosk {
    */
   #order(food) {
     this.#orderManager.append(food);
+  }
+
+  /// ______________________________________________________________________________
+  //                                 외부 메소드 API
+  /// ______________________________________________________________________________
+
+  orderSundaeSoop() {
+    const food = new sundaeSoop();
+    return this.#order(food);
+  }
+
+  orderSoopForHangingOver() {
+    return this.#order(new SoopForHangingOver());
   }
 
   /**

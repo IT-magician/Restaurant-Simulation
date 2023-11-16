@@ -2,7 +2,6 @@ class Staff {
   #progress_status_idx = 0;
   #progress_status_names = ["대기"];
   #progress_status_waiting_times = [0];
-  #current_progress_left_time = 0;
   #check_progress_status_interval = 1000;
 
   /**
@@ -55,26 +54,27 @@ class Staff {
       }, this.#progress_status_waiting_times[this.#progress_status_idx]);
     });
 
-    const progressStatusInterval = getCheckProgressStatusInterval();
-    const countDown = function () {
-      const leftWaitingTime = Math.max(
-        0,
-        getCurrentProgressWaitingTime() - progressStatusInterval
-      );
-      setCurrentProgressWaitingTime(leftWaitingTime);
-
-      return leftWaitingTime;
-    };
-
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // if (progressLevel === 1) reject("대기상태에서는 아무 작업도 하지 않습니다.")
-
-        const leftWaitingTime = countDown();
-
-        resolve([leftWaitingTime, progressLevel]);
-      }, progressStatusInterval);
-    });
+    /// 대체할 가능성 있는 로직
+    // const progressStatusInterval = getCheckProgressStatusInterval();
+    // const countDown = function () {
+    //   const leftWaitingTime = Math.max(
+    //     0,
+    //     getCurrentProgressWaitingTime() - progressStatusInterval
+    //   );
+    //   setCurrentProgressWaitingTime(leftWaitingTime);
+    //
+    //   return leftWaitingTime;
+    // };
+    //
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     // if (progressLevel === 1) reject("대기상태에서는 아무 작업도 하지 않습니다.")
+    //
+    //     const leftWaitingTime = countDown();
+    //
+    //     resolve([leftWaitingTime, progressLevel]);
+    //   }, progressStatusInterval);
+    // });
   }
 
   getMaxProgressLevel() {
@@ -137,10 +137,6 @@ class Staff {
   //   getCurrentProgressWaitingTime() {
   //     return this.#current_progress_left_time;
   //   }
-
-  #setCurrentProgressWaitingTime(left_time) {
-    this.#current_progress_left_time = left_time;
-  }
 }
 
 class Cooker extends Staff {
